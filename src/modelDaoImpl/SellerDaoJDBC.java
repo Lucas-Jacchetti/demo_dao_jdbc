@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBexception;
@@ -22,19 +25,16 @@ public class SellerDaoJDBC implements SellerDao{
 
     @Override
     public void insert(Seller obj) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'insert'");
     }
 
     @Override
     public void update(Seller obj) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
     public void deleteByID(Integer ID) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteByID'");
     }
 
@@ -92,9 +92,49 @@ public class SellerDaoJDBC implements SellerDao{
 
     }
 
+    public List<Seller> findByDepartment(Department department){
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            st = conn.prepareStatement( 
+                                        "SELECT seller.*,department.Name as DepName "
+                                        + "FROM seller INNER JOIN department "
+                                        + "ON seller.departmentID = department.ID "
+                                        + "WHERE departmentID = ? "
+                                        + "ORDER BY name"
+                                        );
+            st.setInt(1, department.getID());
+            rs = st.executeQuery(); //o resulado do comando sql cai nessa variavel resultset
+            
+            List<Seller> list = new ArrayList<>();
+            Map<Integer, Department> map = new HashMap<>();
+            
+            while (rs.next()){ //navegação pelos dados para instanciar o seller apontando para o department
+                //*Mesmo departamento, com 1 ou mais vendedores apontando pra ele */
+                Department dep = map.get(rs.getInt("DepartmentID"));  // caso ja exista, o map.get pega ele, reutilizando                              
+                
+                if (dep == null) { // se o departamento não existir, faz a instanciação
+                    dep = instanciateDepartment(rs);
+                    map.put(rs.getInt("DepartmentID"), dep); //salva o departamento no map
+                }
+                
+                Seller obj = instanciateSeller(rs, dep); //instanciação do seller que apontará para o department
+                list.add(obj);
+                
+            }
+            return list;
+        } 
+        catch (SQLException e) {
+            throw new DBexception(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     @Override
     public List<Seller> findAll() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
     
