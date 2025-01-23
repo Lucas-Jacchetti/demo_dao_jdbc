@@ -1,9 +1,11 @@
+package application;
 
-package src.application;
+import modelEntities.Department;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
         
+        Department obj = new Department(1, "Books");
+        System.out.println(obj);
     }
-    
 }
