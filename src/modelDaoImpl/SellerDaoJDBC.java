@@ -1,5 +1,6 @@
 package modelDaoImpl;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +26,43 @@ public class SellerDaoJDBC implements SellerDao{
 
     @Override
     public void insert(Seller obj) {
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        PreparedStatement st = null;
+
+        try{
+            st = conn.prepareStatement(
+                                    "INSERT INTO seller "
+                                    + "(Name, Email, BirthDate, BaseSalary, DepartmentID) "
+                                    + "VALUES "
+                                    + "(?, ?, ?, ?, ?)",
+                                    Statement.RETURN_GENERATED_KEYS
+                                    );
+            st.setString(1, obj.getName()); //configuração dos placeholders (?)
+            st.setString(2, obj.getEmail());
+            st.setDate(3, new java.sql.Date(obj.getBirthdate().getTime()));
+            st.setDouble(4, obj.getBaseSalary());
+            st.setInt(5, obj.getDepartment().getID());
+
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected > 0) { //se for maior do que 0, inseriu
+                ResultSet rs = st.getGeneratedKeys();
+                if (rs.next()) {
+                    int ID = rs.getInt(1);
+                    obj.setID(ID); //atribuir o ID gerado no obj
+                }
+                DB.closeResultSet(rs);
+            }
+            else{
+                throw new DBexception("Erro, nenhuma linha foi adicionada!");
+            }
+        }
+        catch (SQLException e){
+            throw new DBexception(e.getMessage());
+        }
+        finally{
+            DB.closeStatement(st);
+        }
+
     }
 
     @Override
