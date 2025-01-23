@@ -48,6 +48,14 @@ public class Main {
         sellerDao.insert(newSeller);
         System.out.println("Inserido, Novo ID = " + newSeller.getID());
 
+        System.out.println();
+        System.out.println();
+
+        System.out.println("TESTE 5: seller update ====");
+        seller = sellerDao.findByID(1);
+        seller.setName("Marta Brasil");
+        sellerDao.update(seller);
+        System.out.println("Update completo!");
         
     }
 }
