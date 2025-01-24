@@ -13,7 +13,7 @@ public class Seller implements Serializable{
     private Double baseSalary;
 
     private Department department; //o seller tem um departamento
-                                   //portanto  deve haevr uma ligação entre os objetos
+                                   //portanto  deve haver uma ligação entre os objetos
 
     public Seller(){
 

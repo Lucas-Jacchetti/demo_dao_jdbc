@@ -9,7 +9,6 @@ import modelDao.SellerDao;
 import modelEntities.Department;
 import modelEntities.Seller;
 
-@SuppressWarnings("unused")
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -66,6 +65,8 @@ public class Main {
         System.out.println("Digite o ID para testar o delete");
         int ID = sc.nextInt();
         sellerDao.deleteByID(ID);
+
+        sc.close();
         
     }
 }
