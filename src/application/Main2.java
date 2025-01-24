@@ -17,10 +17,25 @@ public class Main2 {
         DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
         
         System.out.println("TESTE 1: DepartmentDaoJDBC insert -----");
-        Department newDepartment = new Department(5, "Music");
+        Department newDepartment = new Department(21, "x");
         departmentDao.insert(newDepartment);
         System.out.println("Inserido, Novo ID = " + newDepartment.getID());
 
+        System.out.println();
+        System.out.println();
+
+        System.out.println("TESTE 2: DepartmentDaoJDBC findByID -----");
+        Department department = departmentDao.findByID(1);
+        System.out.println(department);
+
+        System.out.println();
+        System.out.println();
+
+        System.out.println("TESTE 2: DepartmentDaoJDBC update -----");
+        department = departmentDao.findByID(15);
+        department.setName("Gaming");
+        departmentDao.update(department);
+        System.out.println("Update completo!");
 
     }
 }
