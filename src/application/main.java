@@ -66,6 +66,8 @@ public class Main {
         int ID = sc.nextInt();
         sellerDao.deleteByID(ID);
 
+        
+
         sc.close();
         
     }

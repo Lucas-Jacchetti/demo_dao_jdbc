@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -16,10 +17,12 @@ public class Main2 {
 
         Scanner sc = new Scanner(System.in);
 
+        List<Department> list = new ArrayList<>();
+
         DepartmentDao departmentDao = DaoFactory.createDepartmentDao();
         
         System.out.println("TESTE 1: DepartmentDaoJDBC insert -----");
-        Department newDepartment = new Department(22, "x");
+        Department newDepartment = new Department(30, "x");
         departmentDao.insert(newDepartment);
         System.out.println("Inserido, Novo ID = " + newDepartment.getID());
 
@@ -34,7 +37,7 @@ public class Main2 {
         System.out.println();
 
         System.out.println("TESTE 3: DepartmentDaoJDBC update -----");
-        department = departmentDao.findByID(15);
+        department = departmentDao.findByID(1);
         department.setName("Gaming");
         departmentDao.update(department);
         System.out.println("Update completo!");
@@ -46,6 +49,17 @@ public class Main2 {
         System.out.println("Insira o Id do departamento a ser deletado");
         int id = sc.nextInt();
         departmentDao.deleteByID(id);
+
+        System.out.println();
+        System.out.println();
+
+        System.out.println("TESTE 4: DepartmentDaoJDBC findAll -----");
+        list = departmentDao.findAll();
+        for (Department obj : list) {
+            System.out.println(obj);
+        }
+
+        
         
         sc.close();
     }
